@@ -1,0 +1,18 @@
+# Ignore Python cache and compiled files
+__pycache__/
+*.py[cod]
+
+# Ignore virtual environment folder
+venv/
+.env
+
+# Ignore chat memory files
+chat_memory.json
+chat_memory_*.json
+
+# Ignore SQLite DB if you're using it
+db.sqlite3
+
+# Ignore system or IDE files
+.DS_Store
+*.log

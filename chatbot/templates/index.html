@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gemini Chatbot</title>
+  <style>
+    body { font-family: Arial; padding: 20px; background:#f7b206; }
+    .chatbot-heading {font-size: 2.0rem; font-weight: bold; color: #2c3e50; margin-top:0px; margin-bottom: 2px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;letter-spacing: 1px; display: inline-block; padding-bottom: 10px; }
+    .chat-box { width: 600px; min-height:500px; margin: auto; background: white; padding: 20px; text-align: center;  display:flex;flex-direction: column;   justify-content: center;border-radius: 10px; box-shadow: 0 0 10px gray; }
+    .chatbot-input { flex: 1; padding: 12px 16px; font-size: 1rem; border: 2px solid #3498db; border-radius: 25px 0 0 25px; outline: none; transition: border-color 0.3s;}
+    .chatbot-input:focus {border-color: #2980b9;}
+    .chatbot-button {padding: 12px 20px; background-color: #3498db; color: white; font-size: 1rem; border: 2px solid #3498db; border-radius: 0 25px 25px 0; cursor: pointer; transition: background-color 0.3s, border-color 0.3s; }
+    .chatbot-button:hover { background-color: #2980b9; border-color: #2980b9; }
+    .chatbot-input-container {display: flex; justify-content: center; align-items: center; margin: 20px auto; width: 100%; max-width: 600px;}
+    .chat-log {height: 400px; overflow-y: auto; border: 2px solid  #2980b9;; padding: 10px; display: flex; flex-direction: column; gap: 10px;}
+    .message { max-width: 70%; padding: 10px 15px; border-radius: 20px; font-size: 1rem; line-height: 1.4; word-wrap: break-word;position: relative;}
+    .user { background-color: #dcf8c6; align-self: flex-end; border-bottom-right-radius: 0; color: black;}
+    .bot { background-color: #abaca4; align-self: flex-start; border-bottom-left-radius: 0; color: black;}
+
+  </style>
+</head>
+<body>
+  <div class="chat-box">
+    <h2 class="chatbot-heading"><u>FinBot 360</u></h2>
+    <div class="chat-log" id="chat-log"></div>
+    <div class="chatbot-input-container">
+        <input class="chatbot-input" type="text" id="message-input" placeholder="Type your message..." style="width: 80%;" />
+        <button class="chatbot-button" onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById("message-input");
+    const chatLog = document.getElementById("chat-log");
+
+    async function sendMessage() {
+      const userText = input.value;
+
+      chatLog.innerHTML += `<div class="message user">${userText}</div>`;
+      input.value = "";
+
+      const response = await fetch("/chat/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userText })
+      });
+
+      const data = await response.json();
+      chatLog.innerHTML += `<div class="message bot">${data.response}</div>`;
+      chatLog.scrollTop = chatLog.scrollHeight;
+  
+    }  
+
+    input.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault(); // Prevent form submission or newline
+      sendMessage();
+    }
+    });
+  </script>
+</body>
+</html>
