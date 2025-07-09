@@ -8,6 +8,7 @@ from langchain.prompts import PromptTemplate
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import LLMChain
 from langchain.agents import Tool, initialize_agent, AgentType
+from langchain_community.agent_toolkits.load_tools import load_tools
 from langchain_community.chat_message_histories import FileChatMessageHistory
 
 from .tools import get_current_date, calculate_age_from_year, bank_rag_search, find_branch_by_city, generate_account_opening_steps
@@ -63,6 +64,7 @@ tools = [
 
 
 ]
+tools = load_tools(["llm-math","wikipedia"], llm=llm)
 
 callback = StdOutCallbackHandler()
 
